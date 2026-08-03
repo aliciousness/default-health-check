@@ -1,0 +1,14 @@
+{
+  "versions": [
+    {
+      "name": "rickroll",
+      "distros": [
+        "bullseye"
+      ],
+      "variants": [
+        "5173",
+        "3000"
+        ]
+    }
+  ]
+}
