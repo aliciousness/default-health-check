@@ -1,70 +1,78 @@
-# rickroll
-[![Docker Pulls](https://img.shields.io/badge/Docker%20Pulls-1321-blue)](https://hub.docker.com/r/aliciousness/rickroll)
+# default-health-check
+[![Docker Pulls](https://img.shields.io/badge/Docker%20Pulls-1321-blue)](https://hub.docker.com/r/aliciousness/health-check)
 [![Latest Release](https://img.shields.io/badge/release-v2.0.5-brightgreen)](https://github.com/aliciousness/ACTION-latest-release-badge/releases)
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/aliciousness)
 <!-- [![Docker Image Size (tag)]() -->
-<!-- ![Build Status](https://img.shields.io/github/actions/workflow/status/aliciousness/rickroll/release.yml?branch=main)]
+<!-- ![Build Status](https://img.shields.io/github/actions/workflow/status/aliciousness/default-health-check/release.yml?branch=main)]
 [![GitHub last commit](https://img.shields.io/badge/Last%20Commit-2024-11-08-yellow)] -->
 
-A Rickroll docker image using [this html](https://github.com/ShatteredDisk/rickroll)
+A minimal Docker image that provides a configurable health check endpoint and a simple maintenance page. Based on `nginxinc/nginx-unprivileged`.
+
+## Overview
+
+This image runs nginx with:
+- A configurable health check endpoint that returns `200 "healthy\n"`
+- A static "Site under maintenance" landing page served at `/`
+- Configurable listen port (defaults to `80`)
+
+Useful as a lightweight placeholder or default backend that satisfies orchestrator health checks (Docker, Kubernetes, etc.).
 
 ## Installation
 
-To install the images, clone the repository:
-
 ```sh
-git clone https://github.com/aliciousness/rickroll.git
+git clone https://github.com/aliciousness/default-health-check.git
 ```
-**OR**
-Use the public docker image found [here](https://hub.docker.com/r/aliciousness/rickroll)
 
-Image is based on nginxinc/nginx-unprivileged, and all the content is local to the container.
+## Environment Variables
 
-# Container Screenshot
+|      Variable       | Description                        | Default   |
+|:-------------------:|------------------------------------|-----------|
+|       `PORT`        | Port nginx listens on              | `80`      |
+| `HEALTH_CHECK_PATH` | Path for the health check endpoint | `/health` |
 
-![image](https://user-images.githubusercontent.com/4349962/187975538-9b7ec5db-3cf4-4dfa-964c-019eba9e272f.png)
-
-# Tags
-| Tag | Description |
-| :----: | --- |
-| latest | Video starts automatically. 1080p AI remaster. |
-| version | Just a version of latest to pin|
-
-# Environment Variables
-| Variable | Description | Default |
-| :----: | --- | --- |
-| PORT | Changes the port nginx is listening on. | 8080 |
-| HEALTH_CHECK_PATH | The path you want to use for the health check | health |
+> **Note:** Setting `HEALTH_CHECK_PATH` to `/` is not supported and will fall back to `/health`.
 
 ## Usage
-You can use these images by including them in your projects or sharing them as you like. Here are some examples:
 
-```yaml
-version: "2.4"
-services:
-  rickroll:
-    image: aliciousness/rickroll:<latest/version>
-    container_name: Rickroll
-    ports:
-      - 1234:1234
-    environment:
-      PORT: 1234 # Set any environment variable if needed by the application
-      HEALTH_CHECK_PATH: /health/check # Set the health check path
+### Docker Run
+
+```sh
+docker run -p 8080:80 aliciousness/default-health-check
 ```
 
-To set a new release of the image you will need to fork the repo set the GH variable/secrets DOCKERHUB_USERNAME and DOCKERHUB_TOKEN
-and create a new GH release with a tagged version that will trigger the workflow
+### Docker Compose
 
-## Contribution
-We welcome contributions! Here are some guidelines to get started:
+```yaml
+services:
+  health-check:
+    image: aliciousness/default-health-check:latest
+    ports:
+      - 8080:80
+    environment:
+      PORT: 80
+      HEALTH_CHECK_PATH: /health
+```
 
-Fork the repository.
-Create a new branch for your feature or bugfix: git checkout -b my-feature-branch
-Commit your changes: git commit -m 'Add new feature'
-Push to the branch: git push origin my-feature-branch
-Create a pull request.
+### Custom Port and Path
+
+```sh
+docker run -p 9090:9090 \
+  -e PORT=9090 \
+  -e HEALTH_CHECK_PATH=/status \
+  aliciousness/default-health-check
+```
+
+### Verify
+
+```sh
+curl http://localhost:8080/health
+# healthy
+```
+
+## How It Works
+
+The entrypoint script generates an nginx config at runtime using the `PORT` and `HEALTH_CHECK_PATH` environment variables, then starts nginx in the foreground.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
 
-You can now edit the README.md file and replace its content with the above sections.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

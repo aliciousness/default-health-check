@@ -1,7 +1,7 @@
 {
   "versions": [
     {
-      "name": "rickroll",
+      "name": "health-check",
       "distros": [
         "bullseye"
       ],
