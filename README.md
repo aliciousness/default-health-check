@@ -1,6 +1,6 @@
 # default-health-check
-[![Docker Pulls](https://img.shields.io/badge/Docker%20Pulls-1321-blue)](https://hub.docker.com/r/aliciousness/health-check)
-[![Latest Release](https://img.shields.io/badge/release-v2.0.5-brightgreen)](https://github.com/aliciousness/ACTION-latest-release-badge/releases)
+[![Docker Pulls](https://img.shields.io/badge/Docker%20Pulls-93-blue)](https://hub.docker.com/r/aliciousness/health-check)
+[![Latest Release](https://img.shields.io/badge/release-v0.0.1-brightgreen)](https://github.com/aliciousness/ACTION-latest-release-badge/releases)
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/aliciousness)
 <!-- [![Docker Image Size (tag)]() -->
 <!-- ![Build Status](https://img.shields.io/github/actions/workflow/status/aliciousness/default-health-check/release.yml?branch=main)]
