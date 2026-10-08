@@ -6,7 +6,7 @@ ENV VERSION=${VERSION}
 USER root
 COPY --link --chmod=755 --chown=nginx:root entrypoint /entrypoint
 COPY --link --chmod=644 --chown=nginx:nginx index.html /usr/share/nginx/html/index.html
-RUN apt update && apt install -y libcap2-bin \
+RUN apt update && apt install -y libcap2-bin openssl \
   && chown -R nginx:nginx /usr/share/nginx/html
 RUN setcap 'cap_net_bind_service=+ep' /usr/sbin/nginx
 USER nginx
